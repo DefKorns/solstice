@@ -1,4 +1,4 @@
-obj-y += nand.o
+obj-$(CONFIG_BLK_SUNXI_NAND) += nand.o
 
 nand-objs += nand_interface.o \
 	nfd/nand_ota_burn.o \

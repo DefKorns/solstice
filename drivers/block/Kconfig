@@ -555,6 +555,9 @@ config BLK_DEV_RBD
 
 	  If unsure, say N.
 config BLK_SUNXI_NAND
-	bool "sunxi nand flash driver support"
+	tristate "sunxi nand flash driver support"
+	help
+	  Built as a module (nand.ko) so a ramdisk can load it itself and
+	  boot from memory without touching the NAND.
 
 endif # BLK_DEV
