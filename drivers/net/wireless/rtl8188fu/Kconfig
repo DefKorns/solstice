@@ -1,0 +1,7 @@
+# SPDX-License-Identifier: GPL-2.0
+config RTL8188FU
+	tristate "Realtek 8188F USB WiFi"
+	depends on USB && CFG80211
+	---help---
+	  Realtek vendor driver v4.3.23.6_20964.20170110, from
+	  https://github.com/kelebek333/rtl8188fu (commit 17825f9).
