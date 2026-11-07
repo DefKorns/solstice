@@ -332,7 +332,7 @@ void __init sun8i_reserve(void)
 	memblock_reserve(SYS_CONFIG_MEMBASE, SYS_CONFIG_MEMSIZE);
 
 	/* reserve for standby */
-	memblock_reserve(SUPER_STANDBY_MEM_BASE, SUPER_STANDBY_MEM_SIZE);
+	memblock_reserve(SUPER_STANDBY_MEM_BASE, SZ_64K);
 
 #if defined(CONFIG_ION) || defined(CONFIG_ION_MODULE)
 #ifndef CONFIG_CMA
