@@ -320,6 +320,10 @@ static int hiddev_open(struct inode *inode, struct file *file)
 	return 0;
 bail_unlock:
 	mutex_unlock(&hiddev->existancelock);
+
+	spin_lock_irq(&list->hiddev->list_lock);
+	list_del(&list->node);
+	spin_unlock_irq(&list->hiddev->list_lock);
 bail:
 	file->private_data = NULL;
 	kfree(list);
@@ -515,12 +519,12 @@ static noinline int hiddev_ioctl_usage(struct hiddev *hiddev, unsigned int cmd, 
 					goto inval;
 			} else if (uref->usage_index >= field->report_count)
 				goto inval;
-
-			else if ((cmd == HIDIOCGUSAGES || cmd == HIDIOCSUSAGES) &&
-				 (uref_multi->num_values > HID_MAX_MULTI_USAGES ||
-				  uref->usage_index + uref_multi->num_values > field->report_count))
-				goto inval;
 		}
+
+		if ((cmd == HIDIOCGUSAGES || cmd == HIDIOCSUSAGES) &&
+		    (uref_multi->num_values > HID_MAX_MULTI_USAGES ||
+		     uref->usage_index + uref_multi->num_values > field->report_count))
+			goto inval;
 
 		switch (cmd) {
 		case HIDIOCGUSAGE:
