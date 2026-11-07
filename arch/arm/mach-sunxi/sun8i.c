@@ -42,6 +42,7 @@
 #include <mach/platform.h>
 #include <mach/sunxi-chip.h>
 #include <mach/gpio.h>
+#include <mach/sys_config.h>
 
 #ifdef CONFIG_SMP
 extern struct smp_operations sunxi_smp_ops;
@@ -464,3 +465,36 @@ MACHINE_START(SUNXI, "sun8i")
 #endif
 #endif
 MACHINE_END
+
+static struct gpio_keys_button power_key = {
+	.code			= KEY_POWER,
+	.desc			= "Power Switch",
+	.active_low		= 1,
+	.debounce_interval	= 20,
+	.type			= EV_KEY,
+};
+
+static struct gpio_keys_platform_data power_key_data = {
+	.buttons	= &power_key,
+	.nbuttons	= 1,
+};
+
+static struct platform_device power_key_device = {
+	.name	= "gpio-keys",
+	.id	= 0,
+	.dev	= {
+		.platform_data	= &power_key_data,
+	},
+};
+
+static int __init sunxi_power_key_init(void)
+{
+	script_item_u val;
+
+	if (script_get_item("platform", "power_switch", &val) != SCIRPT_ITEM_VALUE_TYPE_PIO)
+		return 0;
+
+	power_key.gpio = val.gpio.gpio;
+	return platform_device_register(&power_key_device);
+}
+device_initcall(sunxi_power_key_init);
