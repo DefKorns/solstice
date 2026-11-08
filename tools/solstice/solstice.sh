@@ -82,7 +82,7 @@ done
 
 if [ -n "$console" ]; then
   echo "== booting $console from RAM"
-  "$here/memboot.sh" "$console" "$out/solstice.img"
+  "$here/memboot.sh" "$console" "$out/solstice.img" "$(cat "$out/release")"
 fi
 
 if [ -n "$hakchi_dir" ]; then

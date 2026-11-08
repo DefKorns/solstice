@@ -88,5 +88,5 @@ To go back to the stock hakchi kernel, delete `data/hakchi-latest.hmod`, put the
 | `build_kernel.sh` | `[src] [out]` | `zImage`, `release` and `modules.tar`. Needs the ARM GCC 4.9.4 toolchain in `/opt/toolchain`; `sntool_dir` points to a folder with a runnable `sntool`. |
 | `make_boot_image.sh` | `zImage modules.tar stock_boot.img out.img` | Boot image with the stock ramdisk and command line and only `nand.ko` and `sd_mod.ko` inside. |
 | `make_hakchi_hmod.sh` | `base_hakchi.hmod zImage modules.tar out.hmod` | `hakchi.hmod` with the new boot image and `lib/modules`. |
-| `memboot.sh` | `console_host boot.img` | Uploads the image, checks its md5 and `sntool check`, boots it through kexec and waits. |
+| `memboot.sh` | `console_host boot.img [expected_release]` | Uploads the image, checks its md5 and `sntool check`, boots it through kexec and waits. With a release, it fails if the console comes back on another kernel. |
 | `Dockerfile` | | The packaging image: `cpio`, `xz`, `depmod`, `mkbootimg` and `unpackbootimg`. |

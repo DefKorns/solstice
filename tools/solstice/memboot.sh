@@ -17,10 +17,11 @@ set -e
 
 host=$1
 image=$2
+expected=$3
 ssh_opts="-o ConnectTimeout=6 -o BatchMode=yes -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"
 
 if [ -z "$host" ] || [ ! -f "$image" ]; then
-  echo "usage: $0 console_host boot.img" 1>&2
+  echo "usage: $0 console_host boot.img [expected_release]" 1>&2
   exit 1
 fi
 
@@ -46,6 +47,10 @@ while [ "$tries" -lt 30 ]; do
   sleep 4
   release=$(runOnConsole "uname -r" || true)
   if [ -n "$release" ]; then
+    if [ -n "$expected" ] && [ "$release" != "$expected" ]; then
+      echo "$host came back on $release, not $expected" 1>&2
+      exit 1
+    fi
     echo "$host is up on $release"
     exit 0
   fi
